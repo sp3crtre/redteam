@@ -1,0 +1,2386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUNT JOURNAL - Pentester Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400;700&family=Gochi+Hand&family=Rock+Salt&family=Indie+Flower&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/driver.css"/>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzMiI+CjxnIHRyYW5zZm9ybT0icm90YXRlKDI1IDEyIDE2KSI+CjxyZWN0IHg9IjQiIHk9IjIiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyNCIgcng9IjEiIGZpbGw9IiNmMWM0MGYiIHN0cm9rZT0iIzdhNjYwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiLz4KPHBvbHlnb24gcG9pbnRzPSI0LDIgMTQsMiAxNCw2IDQsNiIgZmlsbD0iI2MwMzkyYiIvPgo8cG9seWdvbiBwb2ludHM9IjQsMjYgMTQsMjYgOSwzMCIgZmlsbD0iIzMzMyIvPgo8L2c+Cjwvc3ZnPg==") 9 22, auto; }
+
+
+.driver-popover {
+    font-family: 'Caveat', cursive !important;
+    font-size: 1.1em !important;
+    background: #f8f3e6 !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+.driver-popover .driver-popover-title {
+    font-family: 'Permanent Marker', cursive !important;
+    color: #8a1a1a !important;
+    font-size: 1.3em !important;
+}
+.driver-popover .driver-popover-description {
+    color: #333 !important;
+}
+.driver-popover .driver-popover-close-btn {
+    color: #8a1a1a !important;
+}
+.driver-popover .driver-popover-prev-btn,
+.driver-popover .driver-popover-next-btn {
+    font-family: 'Caveat', cursive !important;
+    background: #8a1a1a !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 0 !important;
+    font-size: 1em !important;
+    padding: 4px 14px !important;
+    box-shadow: none !important;
+}
+.driver-popover .driver-popover-progress-text {
+    color: #888 !important;
+    font-family: 'Caveat', cursive !important;
+}
+.driver-popover .driver-popover-navigation-btns {
+    gap: 6px !important;
+}
+
+.pencil-trail {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 1px;
+    background: #3a3a3a;
+    mix-blend-mode: multiply;
+}
+.pencil-trail.sm { width: 2px; height: 5px; opacity: 0.55; }
+.pencil-trail.md { width: 3px; height: 8px; opacity: 0.5; }
+.pencil-trail.lg { width: 4px; height: 11px; opacity: 0.45; }
+.pencil-trail.xl { width: 5px; height: 14px; opacity: 0.4; }
+@keyframes pencilFade {
+    0% { opacity: var(--po, 0.35); transform: scale(1) rotate(var(--pr, 0deg)); }
+    100% { opacity: 0; transform: scale(0.3) rotate(var(--pr, 0deg)); }
+}
+
+:root {
+    --bg-body: #7a6b5a;
+    --bg-body-grad1: #8b7d6b;
+    --bg-body-grad2: #6b5d4d;
+    --bg-notebook: #f2ebd4;
+    --bg-card: #f8f3e6;
+    --bg-card-transparent: rgba(255,255,255,0.45);
+    --bg-stat: rgba(255,255,255,0.45);
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --text-muted: #888;
+    --accent: #8a1a1a;
+    --accent-light: rgba(138,26,26,0.1);
+    --accent-border: rgba(138,26,26,0.2);
+    --redacted-bg: #1a1a1a;
+    --dogear-bg: #e8dfc6;
+    --dogear-bg2: #f2ebd4;
+    --content-pad: clamp(10px, 4.5vw, 60px);
+    --nav-pad: clamp(10px, 4.5vw, 60px);
+    --notebook-pad: 0;
+    --title-size: clamp(1.8em, 5.5vw, 4.2em);
+    --subtitle-size: clamp(1em, 2.6vw, 2em);
+    --section-title-size: clamp(1.3em, 2.3vw, 1.8em);
+    --navbar-title-size: clamp(1em, 1.7vw, 1.3em);
+    --navbar-link-size: clamp(0.9em, 1.5vw, 1.2em);
+    --bio-text-size: clamp(1em, 1.7vw, 1.3em);
+    --stat-num-size: clamp(1.2em, 2.5vw, 1.9em);
+    --card-font-size: clamp(0.85em, 1.3vw, 1.05em);
+    --term-font-size: clamp(0.7em, 1.1vw, 0.82em);
+    --monitor-max-w: clamp(340px, 92vw, 1100px);
+    --hero-gap: clamp(12px, 2.5vw, 28px);
+}
+
+body {
+    background: var(--bg-notebook);
+    background-image:
+        repeating-linear-gradient(
+            transparent,
+            transparent 27px,
+            #d8cfb4 27px,
+            #d8cfb4 28px
+        );
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100dvh;
+    overflow: hidden;
+    font-family: 'Caveat', 'Indie Flower', cursive;
+    padding: 0;
+    margin: 0;
+}
+
+.notebook {
+    width: 100%;
+    max-width: 1600px;
+    background: transparent;
+    box-shadow: none;
+    position: relative;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+.journal-content {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    background: transparent;
+}
+
+.content-page {
+    flex: 1;
+    padding: 0 var(--content-pad);
+    position: relative;
+    min-height: min(640px, 80dvh);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px var(--nav-pad);
+    border-bottom: 2px solid rgba(138,26,26,0.12);
+    margin-bottom: clamp(12px, 2vw, 24px);
+    flex-wrap: wrap;
+    gap: clamp(4px, 1vw, 8px);
+}
+.navbar-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+.navbar-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: var(--navbar-title-size);
+    color: var(--accent);
+    letter-spacing: 1.5px;
+}
+.navbar-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 1em;
+    color: var(--text-muted);
+}
+.navbar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+.navbar-link {
+    font-family: 'Caveat', cursive;
+    font-size: var(--navbar-link-size);
+    color: var(--text-secondary);
+    padding: clamp(4px, 0.6vw, 6px) clamp(6px, 1.2vw, 14px);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+    border-bottom: 2px solid transparent;
+}
+.navbar-link:hover {
+    color: var(--accent);
+}
+.navbar-link.active {
+    color: var(--accent);
+    font-weight: 700;
+    border-bottom-color: var(--accent);
+}
+
+.content-section {
+    display: none;
+    animation: sectionIn 0.3s ease-out;
+}
+.content-section.active {
+    display: block;
+}
+
+@keyframes sectionIn {
+    from { opacity: 0.2; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.stain {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+}
+.stain-1 {
+    width: 70px; height: 55px;
+    top: 120px; right: 80px;
+    background: radial-gradient(ellipse at 40% 50%, rgba(150,120,80,0.25) 0%, rgba(150,120,80,0.12) 35%, rgba(150,120,80,0.05) 55%, transparent 78%);
+    transform: rotate(-15deg);
+    filter: blur(0.5px);
+}
+.stain-1::after {
+    content: '';
+    position: absolute;
+    top: 8px; left: 35px;
+    width: 22px; height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(150,120,80,0.15) 0%, transparent 70%);
+    transform: rotate(20deg);
+}
+.stain-2 {
+    width: 45px; height: 38px;
+    top: 440px; left: 240px;
+    background: radial-gradient(ellipse at 50% 40%, rgba(140,110,75,0.20) 0%, rgba(140,110,75,0.08) 40%, transparent 72%);
+    transform: rotate(8deg);
+    filter: blur(0.3px);
+}
+.stain-3 {
+    width: 90px; height: 75px;
+    bottom: 180px; right: 100px;
+    background: radial-gradient(ellipse at 55% 45%, rgba(155,125,85,0.18) 0%, rgba(155,125,85,0.10) 30%, rgba(155,125,85,0.04) 55%, transparent 75%);
+    transform: rotate(-8deg);
+    filter: blur(0.5px);
+}
+.stain-3::after {
+    content: '';
+    position: absolute;
+    top: -10px; left: 18px;
+    width: 32px; height: 26px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(155,125,85,0.12) 0%, transparent 70%);
+    transform: rotate(-15deg);
+}
+.stain-4 {
+    width: 28px; height: 22px;
+    top: 310px; right: 200px;
+    background: radial-gradient(circle, rgba(150,120,80,0.15) 0%, transparent 70%);
+    transform: rotate(25deg);
+    filter: blur(0.5px);
+}
+.stain-5 {
+    width: 50px; height: 42px;
+    bottom: 380px; left: 260px;
+    background: radial-gradient(ellipse at 40% 50%, rgba(140,110,75,0.12) 0%, rgba(140,110,75,0.05) 45%, transparent 65%);
+    transform: rotate(-12deg);
+    filter: blur(0.8px);
+}
+
+.crumple {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background:
+        repeating-linear-gradient(
+            78deg,
+            transparent, transparent 36px,
+            rgba(140,120,90,0.04) 36px, rgba(140,120,90,0.04) 38px
+        ),
+        repeating-linear-gradient(
+            -65deg,
+            transparent, transparent 48px,
+            rgba(130,110,80,0.03) 48px, rgba(130,110,80,0.03) 50px
+        ),
+        repeating-linear-gradient(
+            12deg,
+            transparent, transparent 62px,
+            rgba(150,130,100,0.025) 62px, rgba(150,130,100,0.025) 64px
+        ),
+        repeating-linear-gradient(
+            -25deg,
+            transparent, transparent 80px,
+            rgba(120,100,70,0.02) 80px, rgba(120,100,70,0.02) 82px
+        );
+}
+
+.crumple-spot {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+    opacity: 0.08;
+    border-radius: 50%;
+}
+.crumple-spot::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 30% 40%, rgba(100,80,50,0.3) 0%, transparent 70%);
+}
+.cs-1 { width: 120px; height: 80px; top: 20%; left: 30%; transform: rotate(-20deg); }
+.cs-2 { width: 90px; height: 60px; top: 55%; right: 25%; transform: rotate(15deg); }
+.cs-3 { width: 70px; height: 100px; bottom: 15%; left: 45%; transform: rotate(-10deg); }
+
+.crease-line {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    mix-blend-mode: multiply;
+}
+.crease-line-h {
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent 5%, rgba(160,140,110,0.06) 30%, rgba(160,140,110,0.08) 50%, rgba(160,140,110,0.06) 70%, transparent 95%);
+}
+.crease-line-v {
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent 5%, rgba(160,140,110,0.04) 30%, rgba(160,140,110,0.06) 50%, rgba(160,140,110,0.04) 70%, transparent 95%);
+}
+.cl-1 { top: 30%; }
+.cl-2 { top: 65%; }
+.cl-3 { left: 40%; }
+
+.dogear {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    z-index: 6;
+    pointer-events: none;
+}
+.dogear::before {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 0 40px 40px;
+    border-color: transparent transparent #e8dfc6 transparent;
+    filter: drop-shadow(-2px -2px 4px rgba(0,0,0,0.06));
+}
+.dogear::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 0 38px 38px;
+    border-color: transparent transparent #f2ebd4 transparent;
+}
+.dogear-lines {
+    position: absolute;
+    bottom: 12px; right: 12px;
+    width: 16px; height: 1px;
+    background: rgba(180,170,150,0.3);
+    transform: rotate(-45deg);
+    z-index: 7;
+}
+.dogear-lines::after {
+    content: '';
+    position: absolute;
+    top: -4px; left: 0;
+    width: 12px; height: 1px;
+    background: rgba(180,170,150,0.25);
+    transform: rotate(0deg);
+}
+
+.margin-note {
+    position: absolute;
+    left: 12px;
+    z-index: 3;
+    font-family: 'Caveat', cursive;
+    font-size: 0.75em;
+    color: #888;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    opacity: 0.6;
+    pointer-events: none;
+    letter-spacing: 2px;
+}
+.margin-note-1 { top: 100px; }
+.margin-note-2 { top: 350px; }
+.margin-note-3 { top: 600px; }
+
+.tape {
+    position: absolute;
+    width: 64px;
+    height: 22px;
+    z-index: 5;
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transform: rotate(var(--tr, -2deg));
+}
+.tape::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+}
+.tape::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-50%);
+}
+
+.tape .cr2 {
+    display: none;
+}
+
+.paper-tear {
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    height: 24px;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0.6;
+    background-size: 100% 100%;
+}
+.paper-tear-1 {
+    top: 38%;
+    transform: rotate(-1.5deg);
+    background:
+        linear-gradient(172deg,
+            transparent 2px, rgba(150,130,100,0.10) 2px, rgba(150,130,100,0.10) 3px,
+            transparent 3px, transparent 6px,
+            rgba(150,130,100,0.07) 6px, rgba(150,130,100,0.07) 7px,
+            transparent 7px, transparent 10px,
+            rgba(150,130,100,0.05) 10px, rgba(150,130,100,0.05) 11px,
+            transparent 11px, transparent 14px,
+            rgba(150,130,100,0.08) 14px, rgba(150,130,100,0.08) 15px,
+            transparent 15px, transparent 18px,
+            rgba(150,130,100,0.04) 18px, rgba(150,130,100,0.04) 19px,
+            transparent 19px),
+        repeating-linear-gradient(
+            93deg,
+            transparent, transparent 2px,
+            rgba(150,130,100,0.06) 2px, rgba(150,130,100,0.06) 3px,
+            transparent 3px, transparent 5px,
+            rgba(150,130,100,0.04) 5px, rgba(150,130,100,0.04) 6px,
+            transparent 6px, transparent 8px,
+            rgba(150,130,100,0.03) 8px, rgba(150,130,100,0.03) 9px,
+            transparent 9px, transparent 11px
+        );
+}
+.paper-tear-2 {
+    top: 58%;
+    transform: rotate(1.8deg);
+    background:
+        linear-gradient(178deg,
+            transparent 4px, rgba(150,130,100,0.08) 4px, rgba(150,130,100,0.08) 5px,
+            transparent 5px, transparent 8px,
+            rgba(150,130,100,0.06) 8px, rgba(150,130,100,0.06) 9px,
+            transparent 9px, transparent 13px,
+            rgba(150,130,100,0.05) 13px, rgba(150,130,100,0.05) 14px,
+            transparent 14px, transparent 17px,
+            rgba(150,130,100,0.07) 17px, rgba(150,130,100,0.07) 18px,
+            transparent 18px),
+        repeating-linear-gradient(
+            -87deg,
+            transparent, transparent 3px,
+            rgba(150,130,100,0.05) 3px, rgba(150,130,100,0.05) 4px,
+            transparent 4px, transparent 7px,
+            rgba(150,130,100,0.03) 7px, rgba(150,130,100,0.03) 8px,
+            transparent 8px, transparent 10px,
+            rgba(150,130,100,0.04) 10px, rgba(150,130,100,0.04) 11px,
+            transparent 11px, transparent 14px
+        );
+}
+
+.header {
+    margin-bottom: 28px;
+    position: relative;
+}
+.journal-title {
+    font-family: 'Permanent Marker', 'Rock Salt', cursive;
+    font-size: var(--title-size);
+    color: #8a1a1a;
+    letter-spacing: clamp(1px, 0.5vw, 4px);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+    line-height: 1;
+    display: inline-block;
+}
+.journal-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 3px;
+    background: #8a1a1a;
+    opacity: 0.25;
+    border-radius: 2px;
+}
+.subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: var(--subtitle-size);
+    color: #1a1a1a;
+    font-weight: 700;
+    margin-top: -4px;
+    margin-left: 6px;
+}
+
+.section-title {
+    font-family: 'Permanent Marker', 'Rock Salt', cursive;
+    font-size: var(--section-title-size);
+    color: #8a1a1a;
+    letter-spacing: 2px;
+    margin-bottom: clamp(10px, 1.5vw, 16px);
+    position: relative;
+    display: inline-block;
+}
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0; right: 0;
+    height: 2px;
+    background: #8a1a1a;
+    opacity: 0.2;
+    border-radius: 2px;
+}
+
+.hero-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: clamp(16px, 3vw, 32px);
+}
+.split-terminals {
+    width: 100%;
+    max-width: var(--monitor-max-w);
+    margin: 0 auto;
+}
+.kali-terminal {
+    background: #0a0a0a;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #1a1a1a;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    height: clamp(200px, 38vw, 400px);
+}
+.kali-titlebar {
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: max(0.55em, 0.6vw);
+    color: #aaa;
+    background: #1a1a1a;
+    padding: clamp(2px, 0.35vw, 4px) clamp(8px, 1vw, 16px);
+    text-align: center;
+    user-select: none;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.kali-body {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    min-height: 0;
+}
+.kali-pane {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    padding: clamp(8px, 1.2vw, 14px) clamp(6px, 0.8vw, 12px);
+    font-family: 'Courier Prime', ui-monospace, 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: var(--term-font-size);
+    color: #c0c0c0;
+    line-height: 1.5;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2a2a transparent;
+}
+.kali-pane::-webkit-scrollbar { width: 3px; }
+.kali-pane::-webkit-scrollbar-track { background: transparent; }
+.kali-pane::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+.kali-split-divider {
+    width: 2px;
+    background: #1a1a1a;
+    flex-shrink: 0;
+}
+.kali-line { white-space: pre-wrap; word-break: break-all; }
+.kali-line.kali-green { color: #00ff41; }
+.kali-line.kali-blue { color: #5599dd; }
+.kali-line.kali-white { color: #d4d4d4; }
+.kali-line.kali-gray { color: #5a5a5a; }
+.kali-line.kali-red { color: #f47067; }
+.kali-line.kali-yellow { color: #e5c07b; }
+.kali-line.kali-cyan { color: #6cb6eb; }
+
+.hero-cards {
+    width: clamp(180px, 20vw, 260px);
+    flex-shrink: 0;
+}
+.hero-cards-grid2 {
+    width: 100%;
+}
+
+.torn-card {
+    background: #ffffff;
+    border: none;
+    padding: clamp(8px, 1.2vw, 14px) clamp(10px, 1.5vw, 18px) clamp(8px, 1.2vw, 14px) clamp(10px, 1.5vw, 22px);
+    position: relative;
+    box-shadow: none;
+}
+.torn-card::before {
+    content: '';
+    position: absolute;
+    top: -8px; left: -8px; right: -8px; bottom: -8px;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(5px at 6%  -4px, transparent 55%, #fff 56%),
+        radial-gradient(4px at 15% -2px, transparent 55%, #fff 56%),
+        radial-gradient(5px at 24% -4px, transparent 55%, #fff 56%),
+        radial-gradient(3px at 33% -1px, transparent 55%, #fff 56%),
+        radial-gradient(5px at 42% -3px, transparent 55%, #fff 56%),
+        radial-gradient(4px at 51% -2px, transparent 55%, #fff 56%),
+        radial-gradient(5px at 60% -4px, transparent 55%, #fff 56%),
+        radial-gradient(3px at 69% -1px, transparent 55%, #fff 56%),
+        radial-gradient(5px at 78% -3px, transparent 55%, #fff 56%),
+        radial-gradient(4px at 87% -2px, transparent 55%, #fff 56%),
+        radial-gradient(5px at 96% -4px, transparent 55%, #fff 56%),
+        radial-gradient(5px at -4px  8%, transparent 55%, #fff 56%),
+        radial-gradient(4px at -2px 20%, transparent 55%, #fff 56%),
+        radial-gradient(5px at -4px 32%, transparent 55%, #fff 56%),
+        radial-gradient(3px at -1px 44%, transparent 55%, #fff 56%),
+        radial-gradient(5px at -3px 56%, transparent 55%, #fff 56%),
+        radial-gradient(4px at -2px 68%, transparent 55%, #fff 56%),
+        radial-gradient(5px at -4px 80%, transparent 55%, #fff 56%),
+        radial-gradient(3px at -1px 92%, transparent 55%, #fff 56%),
+        radial-gradient(5px at calc(100% + 4px)  8%, transparent 55%, #fff 56%),
+        radial-gradient(4px at calc(100% + 2px) 20%, transparent 55%, #fff 56%),
+        radial-gradient(5px at calc(100% + 4px) 32%, transparent 55%, #fff 56%),
+        radial-gradient(3px at calc(100% + 1px) 44%, transparent 55%, #fff 56%),
+        radial-gradient(5px at calc(100% + 3px) 56%, transparent 55%, #fff 56%),
+        radial-gradient(4px at calc(100% + 2px) 68%, transparent 55%, #fff 56%),
+        radial-gradient(5px at calc(100% + 4px) 80%, transparent 55%, #fff 56%),
+        radial-gradient(3px at calc(100% + 1px) 92%, transparent 55%, #fff 56%),
+        radial-gradient(5px at 6%  calc(100% + 4px), transparent 55%, #fff 56%),
+        radial-gradient(4px at 15% calc(100% + 2px), transparent 55%, #fff 56%),
+        radial-gradient(5px at 24% calc(100% + 4px), transparent 55%, #fff 56%),
+        radial-gradient(3px at 33% calc(100% + 1px), transparent 55%, #fff 56%),
+        radial-gradient(5px at 42% calc(100% + 3px), transparent 55%, #fff 56%),
+        radial-gradient(4px at 51% calc(100% + 2px), transparent 55%, #fff 56%),
+        radial-gradient(5px at 60% calc(100% + 4px), transparent 55%, #fff 56%),
+        radial-gradient(3px at 69% calc(100% + 1px), transparent 55%, #fff 56%),
+        radial-gradient(5px at 78% calc(100% + 3px), transparent 55%, #fff 56%),
+        radial-gradient(4px at 87% calc(100% + 2px), transparent 55%, #fff 56%),
+        radial-gradient(5px at 96% calc(100% + 4px), transparent 55%, #fff 56%);
+}
+.torn-card::after {
+    display: none;
+}
+.card-header {
+    font-family: 'Permanent Marker', 'Rock Salt', cursive;
+    font-size: clamp(1em, 1.5vw, 1.2em);
+    color: #8a1a1a;
+    margin-bottom: clamp(4px, 0.8vw, 8px);
+    letter-spacing: 1px;
+    border-bottom: 2px dashed #8a1a1a;
+    padding-bottom: 4px;
+    opacity: 0.85;
+}
+.card-list { list-style: none; padding: 0; }
+.card-list li {
+    font-family: 'Caveat', 'Indie Flower', cursive;
+    font-size: var(--card-font-size);
+    color: #8a1a1a;
+    padding: 2px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.4;
+}
+.card-list li::before {
+    content: '\2610';
+    font-size: 1em;
+    color: #8a1a1a;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+.card-list li.checked::before { content: '\2611'; opacity: 0.9; }
+
+.bio-content {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+.bio-text {
+    flex: 1;
+    font-family: 'Caveat', cursive;
+    font-size: var(--bio-text-size);
+    color: #1a1a1a;
+    line-height: 1.6;
+    padding: clamp(10px, 2vw, 18px) clamp(12px, 2vw, 22px);
+    background: #ffffff;
+    border: none;
+    box-shadow: none;
+    transform: rotate(-0.2deg);
+    position: relative;
+}
+.bio-text::before {
+    content: '';
+    position: absolute;
+    top: -7px; left: -3px; right: -3px;
+    height: 9px;
+    background:
+        radial-gradient(4px at 8% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 18% -1px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 28% -4px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 38% -1px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 48% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 58% -2px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 68% -4px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 78% -1px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 88% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 96% -1px, transparent 60%, #fff 61%);
+    z-index: 1;
+    pointer-events: none;
+}
+.bio-text::after {
+    content: '';
+    position: absolute;
+    bottom: -7px; left: -3px; right: -3px;
+    height: 9px;
+    background:
+        radial-gradient(3px at 6% 12px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 16% 13px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 26% 11px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 36% 14px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 46% 12px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 56% 13px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 66% 11px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 76% 14px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 86% 12px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 95% 13px, transparent 60%, #fff 61%);
+    z-index: 1;
+    pointer-events: none;
+}
+.bio-text .ink-highlight { color: #8a1a1a; font-weight: 700; }
+
+.bio-photo {
+    flex-shrink: 0;
+    width: clamp(140px, 18vw, 260px);
+    height: auto;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+    transform: rotate(-1deg);
+    transition: transform 0.3s ease;
+    position: relative;
+    background: #ffffff;
+    padding: 6px;
+}
+.bio-photo::before {
+    content: '';
+    position: absolute;
+    top: -7px; left: -3px; right: -3px;
+    height: 9px;
+    background:
+        radial-gradient(4px at 8% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 18% -1px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 28% -4px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 38% -1px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 48% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 58% -2px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 68% -4px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 78% -1px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 88% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 96% -1px, transparent 60%, #fff 61%);
+    z-index: 2;
+    pointer-events: none;
+}
+.bio-photo::after {
+    content: '';
+    position: absolute;
+    bottom: -7px; left: -3px; right: -3px;
+    height: 9px;
+    background:
+        radial-gradient(3px at 6% 12px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 16% 13px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 26% 11px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 36% 14px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 46% 12px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 56% 13px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 66% 11px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 76% 14px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 86% 12px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 95% 13px, transparent 60%, #fff 61%);
+    z-index: 2;
+    pointer-events: none;
+}
+.bio-photo:hover {
+    transform: rotate(0deg) scale(1.02);
+}
+.bio-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: clamp(10px, 1.5vw, 16px);
+}
+.project-card {
+    background: #ffffff;
+    border: none;
+    padding: 14px 18px;
+    position: relative;
+    box-shadow: none;
+    transform: rotate(var(--r, 0deg));
+}
+.project-card:nth-child(1) { --r: -0.3deg; }
+.project-card:nth-child(2) { --r: 0.4deg; }
+.project-card:nth-child(3) { --r: -0.2deg; }
+.project-card:nth-child(4) { --r: 0.3deg; }
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: -7px; left: -3px; right: -3px;
+    height: 9px;
+    background:
+        radial-gradient(4px at 10% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 22% -1px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 34% -4px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 46% -1px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 58% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 70% -2px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 82% -4px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 94% -1px, transparent 60%, #fff 61%);
+    z-index: 3;
+}
+.project-card::after {
+    content: '';
+    position: absolute;
+    bottom: -7px; left: -3px; right: -3px;
+    height: 9px;
+    background:
+        radial-gradient(4px at 10% 12px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 22% 10px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 34% 13px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 46% 11px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 58% 12px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 70% 10px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 82% 13px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 94% 11px, transparent 60%, #fff 61%);
+    z-index: 3;
+}
+.project-name {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.1em;
+    color: #8a1a1a;
+}
+.project-tags { display: flex; gap: 5px; flex-wrap: wrap; margin: 5px 0; }
+.project-tag {
+    font-family: 'Caveat', cursive;
+    font-size: 0.85em;
+    color: #8a1a1a;
+}
+.project-desc {
+    font-family: 'Caveat', cursive;
+    font-size: 1.18em;
+    color: #555;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+.project-url {
+    font-family: 'Caveat', cursive;
+    font-size: 0.8em;
+    color: #8a1a1a;
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px dashed rgba(138,26,26,0.15);
+    opacity: 0;
+    transition: opacity 0.2s;
+    word-break: break-all;
+    line-height: 1.3;
+}
+.project-card:hover .project-url { opacity: 0.7; }
+
+.redacted {
+    background: #1a1a1a;
+    color: transparent;
+    border-radius: 3px;
+    padding: 0 2px;
+    display: inline-block;
+    line-height: 1.2;
+    user-select: none;
+    filter: blur(1px);
+}
+.redacted::selection {
+    background: transparent;
+}
+
+.certs-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+}
+.certs-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #1a1a1a;
+    opacity: 0.2;
+}
+.cert-item {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 2vw, 18px);
+    padding: clamp(14px, 2.5vw, 24px) 0;
+    position: relative;
+    width: 50%;
+}
+.cert-item:nth-child(odd) {
+    align-self: flex-start;
+    padding-right: clamp(20px, 4vw, 40px);
+    flex-direction: row;
+    text-align: right;
+}
+.cert-item:nth-child(odd) .cert-logo {
+    order: 1;
+}
+.cert-item:nth-child(odd) .cert-body {
+    order: 0;
+}
+.cert-item:nth-child(odd) .cert-title-row,
+.cert-item:nth-child(odd) .cert-meta {
+    justify-content: flex-end;
+}
+.cert-item:nth-child(even) {
+    align-self: flex-end;
+    padding-left: clamp(20px, 4vw, 40px);
+    flex-direction: row;
+    text-align: left;
+}
+.cert-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    border: 3px solid var(--bg-notebook);
+    z-index: 1;
+}
+.cert-item:nth-child(odd)::before {
+    right: 0;
+    transform: translate(50%, -50%);
+}
+.cert-item:nth-child(even)::before {
+    left: 0;
+    transform: translate(-50%, -50%);
+}
+.cert-logo {
+    width: clamp(60px, 8vw, 100px);
+    height: clamp(60px, 8vw, 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.cert-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+.cert-body { flex: 1; min-width: 0; }
+.cert-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.cert-name {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.05em;
+    color: #1a1a1a;
+}
+.cert-meta {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95em;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+}
+.cert-sep {
+    opacity: 0.4;
+}
+.cert-org {
+    color: #8a1a1a;
+}
+.cert-year {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.85em;
+    color: #888;
+}
+.cert-status {
+    font-family: 'Caveat', cursive;
+    font-size: 0.85em;
+    padding: 3px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.cert-status-earned { background: #2d7d4622; color: #2d7d46; border: 1px solid #2d7d4644; }
+.cert-status-progress { background: #b97d2d22; color: #b97d2d; border: 1px solid #b97d2d44; }
+.cert-status-preparing { background: #2d5f8a22; color: #2d5f8a; border: 1px solid #2d5f8a44; }
+.cert-status-goal { background: #6b2d8a22; color: #6b2d8a; border: 1px solid #6b2d8a44; }
+
+.contact-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+.contact-item {
+    flex: 1;
+    min-width: 160px;
+    background: #ffffff;
+    border: none;
+    padding: 14px 18px;
+    text-align: center;
+    box-shadow: none;
+    transform: rotate(var(--ct, 0deg));
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s;
+    position: relative;
+}
+.contact-item::before {
+    content: '';
+    position: absolute;
+    top: -7px; left: -3px; right: -3px;
+    height: 9px;
+    background:
+        radial-gradient(4px at 10% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 22% -1px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 34% -4px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 46% -1px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 58% -3px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 70% -2px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 82% -4px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 94% -1px, transparent 60%, #fff 61%);
+    z-index: 1;
+    pointer-events: none;
+}
+.contact-item::after {
+    content: '';
+    position: absolute;
+    bottom: -7px; left: -3px; right: -3px;
+    height: 9px;
+    background:
+        radial-gradient(4px at 10% 12px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 22% 10px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 34% 13px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 46% 11px, transparent 60%, #fff 61%),
+        radial-gradient(4px at 58% 12px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 70% 10px, transparent 60%, #fff 61%),
+        radial-gradient(5px at 82% 13px, transparent 60%, #fff 61%),
+        radial-gradient(3px at 94% 11px, transparent 60%, #fff 61%);
+    z-index: 1;
+    pointer-events: none;
+}
+.contact-item:hover { transform: rotate(0deg) scale(1.02); }
+.contact-item:nth-child(1) { --ct: 0.3deg; }
+.contact-item:nth-child(2) { --ct: -0.4deg; }
+.contact-item:nth-child(3) { --ct: 0.2deg; }
+.contact-item:nth-child(4) { --ct: -0.3deg; }
+.contact-label {
+    font-family: 'Caveat', cursive;
+    font-size: 1em;
+    color: #8a1a1a;
+}
+
+.writeup-search {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2em;
+    width: 100%;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    background: var(--bg-card);
+    border: none;
+    border-bottom: 2px solid var(--accent-border);
+    box-shadow: none;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.2s;
+}
+.writeup-search:focus {
+    border-bottom-color: var(--accent);
+}
+.writeup-search::placeholder {
+    color: var(--text-muted);
+    font-family: 'Caveat', cursive;
+}
+.writeup-clear {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1em;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--accent-border);
+    border-left: none;
+    box-shadow: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+}
+.writeup-clear:hover { background: #e8dccc; color: #8a1a1a; border-color: #8a1a1a; }
+.writeup-filters {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+.writeup-filter {
+    font-family: 'Caveat', cursive;
+    font-size: 1em;
+    color: var(--text-muted);
+    padding: 2px 12px 4px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    user-select: none;
+    line-height: 1.3;
+}
+.writeup-filter:hover {
+    color: var(--text-secondary);
+}
+.writeup-filter.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 700;
+}
+.search-status {
+    font-family: 'Caveat', cursive;
+    font-size: 0.95em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    min-height: 1.4em;
+    transition: opacity 0.2s;
+}
+.see-more-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 1.15em;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 6px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    display: inline-block;
+    transition: background 0.2s, color 0.2s;
+}
+.see-more-btn:hover {
+    background: var(--accent);
+    color: #fff;
+}
+.project-card {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+
+.mb-24 { margin-bottom: 24px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-16 { margin-bottom: 16px; }
+
+.journal-footer {
+    padding: 12px var(--content-pad);
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1em;
+    color: var(--text-muted);
+    border-top: 1px solid rgba(138,26,26,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    background: var(--bg-notebook);
+    position: relative;
+    z-index: 3;
+}
+.footer-link {
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+.footer-link:hover {
+    opacity: 0.7;
+}
+.footer-sep {
+    color: var(--text-muted);
+    opacity: 0.4;
+}
+.footer-copy {
+    opacity: 0.6;
+    font-size: 0.85em;
+}@media (max-width: 900px) {
+    .bio-content { flex-direction: column; align-items: center; }
+    .bio-photo { width: clamp(200px, 60vw, 320px); }
+    .hero-cards { width: 100%; }
+}
+@media (max-width: 700px) {
+    body { padding: 8px; }
+    .navbar { flex-direction: column; align-items: flex-start; }
+    .navbar-links { width: 100%; }
+    .navbar-link { padding: 6px 10px; }
+    .content-page { min-height: auto; }
+    .contact-grid { flex-direction: column; gap: 8px; }
+    .contact-item { min-width: auto; padding: 12px 14px; }
+    .certs-timeline::before { left: 16px; transform: none; }
+    .cert-item { width: 100%; }
+    .cert-item:nth-child(odd),
+    .cert-item:nth-child(even) {
+        align-self: stretch;
+        padding: 14px 12px 14px 36px;
+        text-align: left;
+    }
+    .cert-item:nth-child(even) .cert-logo,
+    .cert-item:nth-child(odd) .cert-logo,
+    .cert-item:nth-child(odd) .cert-body {
+        order: 0;
+    }
+    .cert-item:nth-child(odd) .cert-title-row,
+    .cert-item:nth-child(odd) .cert-meta {
+        justify-content: flex-start;
+    }
+    .cert-item::before,
+    .cert-item:nth-child(odd)::before,
+    .cert-item:nth-child(even)::before {
+        left: 0;
+        right: auto;
+        transform: translate(-50%, -50%);
+        width: 12px;
+        height: 12px;
+    }
+    .cert-title-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .project-card .tape,
+    .torn-card .tape { display: none; }
+    .paper-tear { display: none; }
+    .dogear { display: none; }
+    .stain-1, .stain-2, .stain-3, .stain-4, .stain-5,
+    .crumple, .crumple-spot { display: none; }
+}
+@media (max-width: 600px) {
+    body { padding: 6px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .content-section .header { margin-bottom: 10px; }
+    .bio-text { font-size: 1em; padding: 12px 14px; }
+    .project-card { padding: 10px 14px; }
+    .project-name { font-size: 1em; }
+    .project-tag { font-size: 0.8em; }
+    .project-desc { font-size: 0.9em; }
+    .kali-body { flex-direction: column; }
+}
+@media (max-width: 400px) {
+    body { padding: 4px; }
+    .navbar-link { font-size: 0.85em; padding: 6px 8px; }
+    .bio-text { font-size: 0.95em; padding: 10px 12px; }
+    .project-card { padding: 8px 12px; }
+    .cert-item { padding: 6px 10px; }
+    .cert-name { font-size: 0.85em; }
+    .kali-body { flex-direction: column; }
+}
+@media (min-height: 1000px) {
+    .kali-terminal { height: clamp(320px, 35vh, 520px); }
+    .bio-section { margin-bottom: 32px; }
+    .bio-text { padding: 24px 28px !important; }
+    .hero-cards { margin-top: 28px; }
+}
+@media (max-height: 700px) {
+    .header { margin-bottom: 8px !important; }
+    .header .journal-title { font-size: calc(var(--title-size) * 0.7); }
+    .header .subtitle { font-size: calc(var(--subtitle-size) * 0.7); }
+    .kali-terminal { height: clamp(100px, 30vh, 200px); }
+    .kali-pane { font-size: calc(var(--term-font-size) * 0.85); }
+    .hero-section { margin-bottom: 8px; }
+    .section-title { margin-bottom: 6px; }
+}
+@media (max-height: 500px) {
+    .notebook { height: auto; min-height: 100dvh; }
+    .journal-content { overflow-y: visible; }
+    .content-page { min-height: auto; }
+    body { overflow-y: auto; align-items: flex-start; }
+    .header { display: none; }
+    .kali-terminal { height: clamp(80px, 35vh, 160px); }
+    .bio-text { padding: 8px 10px !important; font-size: calc(var(--bio-text-size) * 0.85) !important; }
+    .hero-cards { margin-top: 8px; }
+}
+@media (max-height: 400px) {
+    .navbar { padding: 4px var(--nav-pad); margin-bottom: 4px; }
+    .section-title, .bio-stats { display: none; }
+    .bio-text { font-size: calc(var(--bio-text-size) * 0.75) !important; }
+    .kali-terminal { height: 100px; }
+}
+
+.journey-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(26,26,26,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+.journey-modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.journey-modal {
+    background: #f8f3e6;
+    max-width: 520px;
+    width: 90%;
+    padding: 40px 36px 32px;
+    position: relative;
+    border: 1px solid #d4c9a8;
+    font-family: 'Caveat', cursive;
+    color: #1a1a1a;
+    text-align: center;
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
+}
+.journey-modal .tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 40px;
+    height: 18px;
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.journey-modal h2 {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.8em;
+    color: #8a1a1a;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+}
+.journey-modal .sub {
+    font-family: 'Caveat', cursive;
+    font-size: 1.1em;
+    color: #8a1a1a;
+    margin-bottom: 18px;
+    border-bottom: 1px dashed #d4c9a8;
+    padding-bottom: 14px;
+}
+.journey-modal p {
+    font-size: 1.15em;
+    line-height: 1.55;
+    color: #444;
+    margin-bottom: 24px;
+    text-align: left;
+    padding: 0 4px;
+}
+.journey-modal p .hl {
+    color: #8a1a1a;
+    font-weight: 700;
+}
+.journey-modal-close {
+    font-family: 'Permanent Marker', cursive;
+    background: #8a1a1a;
+    color: #f8f3e6;
+    border: none;
+    padding: 10px 36px;
+    font-size: 1.1em;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, transform 0.15s;
+}
+.journey-modal-close:hover {
+    background: #1a1a1a;
+    transform: scale(1.03);
+}
+
+@keyframes stamp {
+    0% { transform: rotate(var(--r, 0deg)) scale(1); }
+    20% { transform: rotate(var(--r, 0deg)) scale(0.92); }
+    40% { transform: rotate(calc(var(--r, 0deg) + 0.6deg)) scale(0.95); }
+    55% { transform: rotate(calc(var(--r, 0deg) - 0.4deg)) scale(0.97); }
+    70% { transform: rotate(calc(var(--r, 0deg) + 0.2deg)) scale(0.99); }
+    100% { transform: rotate(var(--r, 0deg)) scale(1); }
+}
+.project-card.stamp {
+    animation: stamp 0.35s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="journey-modal-overlay" id="journeyModalOverlay">
+    <div class="journey-modal">
+        <div class="tape"></div>
+        <h2>HUNT JOURNAL</h2>
+        <div class="sub">Personal Red Team Learning Portfolio</div>
+        <p>
+            This is a <span class="hl">personal portfolio</span> documenting my journey learning Red Team &amp; penetration testing. 
+            All targets shown are on <span class="hl">authorized platforms</span> (HTB, THM). 
+            Certifications listed are <span class="hl">planned goals</span> — not yet earned. 
+            Nothing here represents real-world unauthorized activity.
+        </p>
+        <button class="journey-modal-close" id="journeyModalClose">Let's Go</button>
+    </div>
+</div>
+
+<div class="notebook">
+    
+    <div class="journal-content">
+        
+        <div class="stain stain-1"></div>
+        <div class="stain stain-2"></div>
+        <div class="stain stain-3"></div>
+        <div class="stain stain-4"></div>
+        <div class="stain stain-5"></div>
+
+        <div class="crumple"></div>
+        <div class="crumple-spot cs-1"></div>
+        <div class="crumple-spot cs-2"></div>
+        <div class="crumple-spot cs-3"></div>
+        <div class="crease-line crease-line-h cl-1"></div>
+        <div class="crease-line crease-line-h cl-2"></div>
+        <div class="crease-line crease-line-v cl-3"></div>
+
+
+
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <span class="navbar-title">KURT ZAMORA</span>
+                </div>
+                <ul class="navbar-links" id="tocList">
+                    <li class="navbar-link active" data-section="about">whoami</li>
+                    <li class="navbar-link" data-section="writeups">Writeups</li>
+                    <li class="navbar-link" data-section="projects">Lab Projects</li>
+                </ul>
+            </nav>
+
+            <div class="content-page" id="contentPage">
+
+                <div class="content-section active" id="section-about">
+                    <div class="header">
+                        <div class="journal-title">HUNT JOURNAL</div>
+                        <div class="subtitle">RED TEAM OPERATOR</div>
+                    </div>
+                    <div class="hero-section">
+                        <div class="split-terminals">
+                            <div class="kali-terminal">
+                                <div class="kali-titlebar">kali@kali: ~ (tmux)                                       10.10.10.10 22:80</div>
+                                <div class="kali-body">
+                                    <div class="kali-pane" id="kaliOut1"></div>
+                                    <div class="kali-split-divider"></div>
+                                    <div class="kali-pane" id="kaliOut2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bio-section mb-24">
+                        <div class="section-title">WHOAMI</div>
+                        <div class="bio-content">
+                            <div class="bio-photo">
+                                <div class="tape" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-1.5deg);width:40px;height:16px;z-index:6;"><span class="cr2"></span></div>
+                                <img src="assets/me.jpg" alt="Kurt Zamora">
+                            </div>
+                            <div class="bio-text">
+                                <div class="tape" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(1deg);width:40px;height:16px;z-index:6;"><span class="cr2"></span></div>
+                                <p><span class="ink-highlight">Cybersecurity student</span> with a strong focus on <span class="ink-highlight">red teaming, network penetration testing, and Active Directory attack chains</span>. Currently pursuing OSCP, CRTO, and PNPT certifications while grinding HTB labs, building a home lab, and competing in CTFs.</p>
+                                <br>
+                                <p>My methodology follows a structured kill chain: <span class="ink-highlight">reconnaissance</span> to map the attack surface, <span class="ink-highlight">enumeration</span> to find misconfigurations and weak points, <span class="ink-highlight">exploitation</span> for initial access, <span class="ink-highlight">lateral movement</span> and <span class="ink-highlight">privilege escalation</span> to reach the crown jewels, and thorough <span class="ink-highlight">documentation</span> to turn every finding into a clear, actionable writeup.</p>
+                                <br>
+                                <p>Home lab runs a full Active Directory environment with multi-domain controllers, Splunk SIEM, and dedicated C2 infrastructure for adversary simulation. Every box and lab exercise gets documented to contribute back actionable knowledge to the security community.</p>
+                                <br>
+                                <p>Deepening my skills in <span class="ink-highlight">evasion techniques, AV/EDR bypass, and custom exploit development</span>. Long-term goal is to lead offensive security operations and help organizations harden their defenses through real-world adversarial emulation.</p>
+                            </div>
+                            <div class="hero-cards">
+                                <div class="hero-cards-grid2">
+                                    <div class="torn-card" style="transform:rotate(-0.5deg);">
+                                        <div class="tape" style="position:absolute;top:-11px;left:50%;transform:translateX(-50%) rotate(-2deg);"><span class="cr2"></span></div>
+                                        <div class="card-header">SKILLS</div>
+                                        <ul class="card-list">
+                                            <li class="checked">Bug Bounty</li>
+                                            <li class="checked">CTF Competitions</li>
+                                            <li class="checked">Red Teaming</li>
+                                            <li class="checked">Adversary Simulation</li>
+                                            <li class="checked">Active Directory</li>
+                                            <li class="checked">Web App Security</li>
+                                            <li class="checked">Network Pentesting</li>
+                                            <li class="checked">Exploit Development</li>
+                                            <li class="checked">Linux PrivEsc</li>
+                                            <li class="checked">Windows PrivEsc</li>
+                                            <li class="checked">C2 Frameworks</li>
+                                            <li class="checked">Social Engineering</li>
+                                            <li class="checked">Malware Analysis</li>
+                                            <li class="checked">Cloud Security</li>
+                                            <li class="checked">OSINT / Recon</li>
+                                            <li class="checked">API Pentesting</li>
+                                            <li class="checked">Python / Scripting</li>
+                                            <li class="checked">SIEM / Detection</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-title" style="margin-top:24px;">BLOG / WRITEUPS</div>
+                    <div class="projects-grid" style="margin-bottom:16px;">
+                        <a href="https://medium.com/@FuckBeingAverage/connected-htb-walkthrough-f3d202d9f06a" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Connected — HTB</div>
+                            <div class="project-tags"><span class="project-tag">FreePBX</span><span class="project-tag">SQLi</span><span class="project-tag">PrivEsc</span></div>
+                            <div class="project-desc">FreePBX 16 exploitation via CVE-2025-57819 (stacked SQLi) and CVE-2025-61678 (authenticated file upload).</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/pingpong-htb-walkthrough-ceef1ebf3093" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(0.5deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">PingPong — HTB</div>
+                            <div class="project-tags"><span class="project-tag">AD</span><span class="project-tag">ESC13</span><span class="project-tag">Trust</span></div>
+                            <div class="project-desc">Cross-forest AD attack. ESC13 cert template abuse for PKINIT SID injection across forest trust.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/exploiting-xslt-injection-to-achieve-full-system-compromise-b5f0b3f21af0" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-0.5deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">XSLT Injection — RCE</div>
+                            <div class="project-tags"><span class="project-tag">XSLT</span><span class="project-tag">RCE</span><span class="project-tag">needrestart</span></div>
+                            <div class="project-desc">XSLT injection to RCE and LFI, then privilege escalation via CVE-2024-48990 PYTHONPATH hijacking.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/devhub-htb-walkthrough-27ace1c84fa6" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(1deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">DevHub — HTB</div>
+                            <div class="project-tags"><span class="project-tag">MCP</span><span class="project-tag">Jupyter</span><span class="project-tag">WebSocket</span></div>
+                            <div class="project-desc">MCPJam Inspector RCE via unsanitised spawn(). Lateral movement to analyst via Jupyter WebSocket exploit.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/sense-htb-walkthrough" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-0.3deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Sense — HTB</div>
+                            <div class="project-tags"><span class="project-tag">Web</span><span class="project-tag">LFI</span><span class="project-tag">Log Poison</span></div>
+                            <div class="project-desc">FreeBSD pfSense LFI via path traversal, log poisoning to RCE, privilege escalation through misconfigured sudo.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/blackfield-htb-walkthrough" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(0.8deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">BlackField — HTB</div>
+                            <div class="project-tags"><span class="project-tag">AD</span><span class="project-tag">AS-REP</span><span class="project-tag">DCSync</span></div>
+                            <div class="project-desc">AD attack chain: AS-REP roasting for initial access, Kerberoasting for lateral, DCSync for domain compromise.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/cicada-thm-walkthrough" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-0.7deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Cicada — THM</div>
+                            <div class="project-tags"><span class="project-tag">Stego</span><span class="project-tag">Forensics</span><span class="project-tag">OSINT</span></div>
+                            <div class="project-desc">Steganography extraction, metadata analysis, and OSINT to trace digital footprints in an IR scenario.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/internal-thm-walkthrough" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(0.4deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Internal — THM</div>
+                            <div class="project-tags"><span class="project-tag">Pivoting</span><span class="project-tag">Lateral</span><span class="project-tag">AD</span></div>
+                            <div class="project-desc">Internal network pentest: foothold through web app vuln, lateral movement, AD exploitation for domain admin.</div>
+                        </a>
+                    </div>
+                    <div style="text-align:center;margin-bottom:24px;">
+                        <a href="#section-writeups" class="see-more-btn" id="seeMoreWriteups">See all writeups →</a>
+                    </div>
+
+                    <div class="section-title" style="margin-top:24px;">CERTIFICATION GOALS</div>
+                    <div class="certs-timeline">
+                        <div class="cert-item">
+                            <div class="cert-logo"><img src="assets/crto.png" alt="CRTO"></div>
+                            <div class="cert-body">
+                                <div class="cert-title-row">
+                                    <div class="cert-name">Certified Red Team Operator</div>
+                                </div>
+                                <div class="cert-meta">
+                                    <span class="cert-org">Altered Security</span>
+                                    <span class="cert-sep">·</span>
+                                    <span class="cert-year">Planned</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-logo"><img src="assets/oscp.png" alt="OSCP"></div>
+                            <div class="cert-body">
+                                <div class="cert-title-row">
+                                    <div class="cert-name">OSCP</div>
+                                </div>
+                                <div class="cert-meta">
+                                    <span class="cert-org">Offensive Security</span>
+                                    <span class="cert-sep">·</span>
+                                    <span class="cert-year">Planned</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-logo"><img src="assets/pnpt.png" alt="PNPT"></div>
+                            <div class="cert-body">
+                                <div class="cert-title-row">
+                                    <div class="cert-name">PNPT</div>
+                                </div>
+                                <div class="cert-meta">
+                                    <span class="cert-org">TCM Security</span>
+                                    <span class="cert-sep">·</span>
+                                    <span class="cert-year">Planned</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-logo"><img src="assets/cpts.png" alt="CPTS"></div>
+                            <div class="cert-body">
+                                <div class="cert-title-row">
+                                    <div class="cert-name">HTB CPTS</div>
+                                </div>
+                                <div class="cert-meta">
+                                    <span class="cert-org">HackTheBox</span>
+                                    <span class="cert-sep">·</span>
+                                    <span class="cert-year">Planned</span>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="cert-item">
+                            <div class="cert-logo"><img src="assets/osee.png" alt="OSEE"></div>
+                            <div class="cert-body">
+                                <div class="cert-title-row">
+                                    <div class="cert-name">OSEE</div>
+                                </div>
+                                <div class="cert-meta">
+                                    <span class="cert-org">OffSec</span>
+                                    <span class="cert-sep">·</span>
+                                    <span class="cert-year">Planned</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="content-section" id="section-writeups">
+                    <div class="header">
+                        <div class="journal-title">HUNT JOURNAL</div>
+                        <div class="subtitle">RED TEAM OPERATOR</div>
+                    </div>
+
+                    <div class="section-title">WRITEUPS</div>
+                    <div style="display:flex;gap:8px;align-items:stretch;margin-bottom:8px;">
+                        <input type="text" class="writeup-search" id="writeupSearch" placeholder="Search writeups by title, tag, or technique..." style="margin-bottom:0;">
+                        <button class="writeup-clear" id="writeupClear" aria-label="Clear search">✕</button>
+                    </div>
+                    <div class="writeup-filters" id="writeupFilters">
+                        <span class="writeup-filter active" data-cat="all">All</span>
+                        <span class="writeup-filter" data-cat="ctf">CTF</span>
+                    </div>
+                    <div class="search-status" id="searchStatus"></div>
+                    <div class="projects-grid" id="writeupGrid">
+                        <a href="https://medium.com/@FuckBeingAverage/connected-htb-walkthrough-f3d202d9f06a" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Connected — HTB</div>
+                            <div class="project-tags"><span class="project-tag">FreePBX</span><span class="project-tag">SQLi</span><span class="project-tag">PrivEsc</span></div>
+                            <div class="project-desc">FreePBX 16 exploitation via CVE-2025-57819 (stacked SQLi) and CVE-2025-61678 (authenticated file upload). Privilege escalation through incron + DAHDI config hijacking to root.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/devhub-htb-walkthrough-27ace1c84fa6" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(1deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">DevHub — HTB</div>
+                            <div class="project-tags"><span class="project-tag">MCP</span><span class="project-tag">Jupyter</span><span class="project-tag">WebSocket</span></div>
+                            <div class="project-desc">MCPJam Inspector RCE via unsanitised spawn(). Lateral movement to analyst via Jupyter WebSocket exploit. Root escalation through hidden OPSMCP admin dump tool.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/exploiting-xslt-injection-to-achieve-full-system-compromise-b5f0b3f21af0" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-0.5deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">XSLT Injection — RCE & PrivEsc</div>
+                            <div class="project-tags"><span class="project-tag">XSLT</span><span class="project-tag">RCE</span><span class="project-tag">needrestart</span></div>
+                            <div class="project-desc">XSLT injection to achieve remote code execution and local file inclusion. Privilege escalation to root via CVE-2024-48990 (needrestart PYTHONPATH hijacking).</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/pingpong-htb-walkthrough-ceef1ebf3093" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(0.5deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">PingPong — HTB</div>
+                            <div class="project-tags"><span class="project-tag">AD</span><span class="project-tag">ESC13</span><span class="project-tag">Trust</span></div>
+                            <div class="project-desc">Cross-forest AD attack. ESC13 cert template abuse for PKINIT SID injection, Ligolo tunneling to DC2, WriteDACL abuse on gMSA Managers across forest trust.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/sense-htb-walkthrough" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-0.3deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Sense — HTB</div>
+                            <div class="project-tags"><span class="project-tag">Web</span><span class="project-tag">LFI</span><span class="project-tag">Log Poison</span></div>
+                            <div class="project-desc">FreeBSD pfSense appliance enumeration. LFI via path traversal, log poisoning to RCE, and privilege escalation through misconfigured sudo permissions.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/blackfield-htb-walkthrough" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(0.8deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">BlackField — HTB</div>
+                            <div class="project-tags"><span class="project-tag">AD</span><span class="project-tag">AS-REP</span><span class="project-tag">DCSync</span></div>
+                            <div class="project-desc">Active Directory attack chain: AS-REP roasting for initial access, Kerberoasting for lateral movement, DCSync attack to extract domain credentials and full compromise.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/cicada-thm-walkthrough" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-0.7deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Cicada — THM</div>
+                            <div class="project-tags"><span class="project-tag">Stego</span><span class="project-tag">Forensics</span><span class="project-tag">OSINT</span></div>
+                            <div class="project-desc">Steganography extraction, metadata analysis, and OSINT techniques to trace digital footprints. Realistic incident response scenario with evidence gathering.</div>
+                        </a>
+                        <a href="https://medium.com/@FuckBeingAverage/internal-thm-walkthrough" target="_blank" rel="noopener noreferrer" class="project-card" data-category="ctf" style="text-decoration:none;color:inherit;">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(0.4deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Internal — THM</div>
+                            <div class="project-tags"><span class="project-tag">Pivoting</span><span class="project-tag">Lateral</span><span class="project-tag">AD</span></div>
+                            <div class="project-desc">Internal network penetration test: initial foothold through web app vulnerability, lateral movement across segmented network, AD exploitation for domain admin.</div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content-section" id="section-projects">
+                    <div class="header">
+                        <div class="journal-title">HUNT JOURNAL</div>
+                        <div class="subtitle">RED TEAM OPERATOR</div>
+                    </div>
+
+                    <div class="section-title">LAB PROJECTS</div>
+                    <div class="projects-grid">
+                        <div class="project-card">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-1deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Active Directory Lab</div>
+                            <div class="project-tags"><span class="project-tag">AD</span><span class="project-tag">BloodHound</span><span class="project-tag">Kerberos</span></div>
+                            <div class="project-desc">Full AD environment with 3 domain controllers, 20 workstations. Practicing Kerberoasting, AS-REP roasting, ACL abuse, and DCSync attacks.</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-0.5deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">C2 Playground</div>
+                            <div class="project-tags"><span class="project-tag">C2</span><span class="project-tag">Python</span><span class="project-tag">Learning</span></div>
+                            <div class="project-desc">Studying C2 framework internals by building a basic agent/controller in Python. Understanding encryption, beaconing, and EDR evasion fundamentals.</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="tape" style="position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(0.5deg);width:36px;height:16px;"><span class="cr2"></span></div>
+                            <div class="project-name">Phishing Simulation</div>
+                            <div class="project-tags"><span class="project-tag">Phishing</span><span class="project-tag">GoPhish</span><span class="project-tag">SET</span></div>
+                            <div class="project-desc">Setting up GoPhish for internal phishing simulations. Crafting email templates, landing pages, and tracking metrics for security awareness training.</div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+    </div>
+
+            <footer class="journal-footer">
+                <a href="https://www.linkedin.com/in/redteam-hunter" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
+                <span class="footer-sep">·</span>
+                <a href="mailto:hunter@protonmail.com" class="footer-link">ProtonMail</a>
+                <span class="footer-sep">·</span>
+                <a href="https://github.com/redteam-hunter" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+                <span class="footer-sep">·</span>
+                <span class="footer-copy">HUNT JOURNAL</span>
+            </footer>
+
+</div>
+
+<script src="assets/driver.iife.js"></script>
+<script>
+(function() {
+
+
+
+    /* ─── Ghost Typewriter ─── */
+    (function() {
+        var out1 = document.getElementById('kaliOut1');
+        var out2 = document.getElementById('kaliOut2');
+        if (!out1 || !out2) return;
+
+        function typeLine(el, text, cls, cb) {
+            var div = document.createElement('div');
+            div.className = 'kali-line' + (cls ? ' ' + cls : '');
+            el.appendChild(div);
+            var i = 0;
+            (function typeChar() {
+                if (i < text.length) {
+                    div.textContent += text.charAt(i);
+                    i++;
+                    el.scrollTop = el.scrollHeight;
+                    setTimeout(typeChar, 12 + Math.random() * 18);
+                } else {
+                    if (cb) cb();
+                }
+            })();
+        }
+
+        function streamLines(el, lines, idx, delay) {
+            if (idx >= lines.length) return;
+            var item = lines[idx];
+            typeLine(el, item.text, item.cls || null, function() {
+                setTimeout(function() { streamLines(el, lines, idx + 1, delay); }, delay || 40);
+            });
+        }
+
+        function clearPane(el) { el.innerHTML = ''; }
+
+        function makeScene(cmds, outputs) {
+            var lines = [];
+            lines.push({ text: 'kali@kali:~$ ' + cmds, cls: 'kali-green' });
+            outputs.forEach(function(o) { lines.push({ text: o.text, cls: o.cls || null }); });
+            return lines;
+        }
+        /* ─── Pane 1 Scenes ─── */
+        var scenes1 = [
+            makeScene('sudo nmap -sV -sC -T4 -A 10.10.10.10', [
+                { text: 'Starting Nmap 7.94SVN ( https://nmap.org )', cls: 'kali-gray' },
+                { text: 'NSE: Loading scripts — 56 scripts loaded for scanning', cls: 'kali-gray' },
+                { text: 'Initiating ARP Ping Scan at 14:32:14', cls: 'kali-cyan' },
+                { text: 'Completed ARP Ping Scan at 14:32:14, 0.04s elapsed', cls: 'kali-gray' },
+                { text: 'Initiating SYN Stealth Scan at 14:32:17', cls: 'kali-cyan' },
+                { text: 'Scanning 10.10.10.10 [1000 ports]', cls: 'kali-cyan' },
+                { text: 'Discovered open port 22/tcp on 10.10.10.10', cls: 'kali-green' },
+                { text: 'Discovered open port 80/tcp on 10.10.10.10', cls: 'kali-green' },
+                { text: 'Discovered open port 443/tcp on 10.10.10.10', cls: 'kali-green' },
+                { text: 'Discovered open port 8080/tcp on 10.10.10.10', cls: 'kali-green' },
+                { text: 'Completed SYN Stealth Scan at 14:32:41, 24.37s elapsed', cls: 'kali-gray' },
+                { text: 'Initiating Service scan at 14:32:41', cls: 'kali-cyan' },
+                { text: 'Scanning 4 services on 10.10.10.10', cls: 'kali-cyan' },
+                { text: 'Completed Service scan at 14:32:58, 16.91s elapsed', cls: 'kali-gray' },
+                { text: 'Initiating NSE at 14:32:58', cls: 'kali-cyan' },
+                { text: 'NSE: Running http-enum.nse — found admin/, login/, backup/', cls: 'kali-gray' },
+                { text: 'NSE: Running http-headers.nse — fetching headers', cls: 'kali-gray' },
+                { text: 'Completed NSE at 14:33:12, 13.42s elapsed', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: 'Nmap scan report for 10.10.10.10', cls: 'kali-white' },
+                { text: 'Host is up (0.042s latency).', cls: 'kali-white' },
+                { text: 'PORT     STATE    SERVICE     VERSION', cls: 'kali-cyan' },
+                { text: '22/tcp   open     ssh         OpenSSH 8.2p1 (Ubuntu 4)', cls: 'kali-green' },
+                { text: '80/tcp   open     http        Apache httpd 2.4.41', cls: 'kali-green' },
+                { text: '443/tcp  open     ssl/http    nginx 1.18.0', cls: 'kali-green' },
+                { text: '445/tcp  filtered microsoft-ds', cls: 'kali-gray' },
+                { text: '8080/tcp open     http        Apache Tomcat 9.0.31', cls: 'kali-green' },
+                { text: '3306/tcp filtered mysql', cls: 'kali-gray' },
+                { text: '8443/tcp filtered https-alt', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: 'Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel', cls: 'kali-white' },
+                { text: 'Nmap done: 1 IP address (1 host up) scanned in 54.72s', cls: 'kali-gray' },
+            ]),
+            makeScene('sqlmap -u http://testphp.vulnweb.com/artists.php?artist=1 --batch --dbs', [
+                { text: 'sqlmap 1.8.2#stable (nix)', cls: 'kali-cyan' },
+                { text: '[14:33:01] [INFO] testing connection to the target URL', cls: 'kali-gray' },
+                { text: '[14:33:02] [INFO] checking if the target is protected by WAF', cls: 'kali-gray' },
+                { text: '[14:33:03] [INFO] testing if the target URL content is stable', cls: 'kali-gray' },
+                { text: '[14:33:04] [INFO] target URL content is stable', cls: 'kali-green' },
+                { text: '[14:33:06] [INFO] testing if GET parameter \'artist\' is dynamic', cls: 'kali-gray' },
+                { text: '[14:33:07] [WARNING] GET parameter \'artist\' appears dynamic', cls: 'kali-yellow' },
+                { text: '[14:33:09] [INFO] heuristic (basic) test shows that GET parameter \'artist\' might be injectable', cls: 'kali-cyan' },
+                { text: '[14:33:12] [INFO] testing for SQL injection on GET parameter \'artist\'', cls: 'kali-gray' },
+                { text: '[14:33:14] [INFO] testing \'AND boolean-based blind - WHERE or HAVING clause\'', cls: 'kali-gray' },
+                { text: '[14:33:17] [INFO] GET parameter \'artist\' is \'AND boolean-based blind\' injectable', cls: 'kali-green' },
+                { text: '[14:33:19] [INFO] testing \'MySQL >= 5.5 AND error-based - WHERE or HAVING clause\'', cls: 'kali-gray' },
+                { text: '[14:33:22] [INFO] GET parameter \'artist\' is \'MySQL error-based\' injectable', cls: 'kali-green' },
+                { text: '[14:33:25] [INFO] testing \'MySQL >= 5.0.12 time-based blind - parameter\'', cls: 'kali-gray' },
+                { text: '[14:33:28] [INFO] GET parameter \'artist\' is \'time-based blind\' injectable', cls: 'kali-green' },
+                { text: '[14:33:31] [INFO] testing \'MySQL UNION query (random number) - 1 to 20 columns\'', cls: 'kali-gray' },
+                { text: '[14:33:35] [INFO] target URL appears to have 7 columns in FROM clause', cls: 'kali-cyan' },
+                { text: '[14:33:35] [INFO] GET parameter \'artist\' is \'UNION query\' injectable', cls: 'kali-green' },
+                { text: '[14:33:38] [INFO] checking if the injection point supports stacked queries', cls: 'kali-gray' },
+                { text: '[14:33:39] [INFO] injection point supports stacked queries (TITAN)', cls: 'kali-green' },
+                { text: '[14:33:42] [INFO] fetching database names', cls: 'kali-cyan' },
+                { text: '[14:33:44] [INFO] retrieved: information_schema', cls: 'kali-white' },
+                { text: '[14:33:47] [INFO] retrieved: mysql', cls: 'kali-white' },
+                { text: '[14:33:50] [INFO] retrieved: acuart', cls: 'kali-white' },
+                { text: '[14:33:53] [INFO] retrieved: performance_schema', cls: 'kali-white' },
+                { text: '[14:33:56] [INFO] retrieved: phpmyadmin', cls: 'kali-white' },
+                { text: '', cls: '' },
+                { text: 'available databases [5]:', cls: 'kali-white' },
+                { text: '[*] acuart', cls: 'kali-green' },
+                { text: '[*] information_schema', cls: 'kali-gray' },
+                { text: '[*] mysql', cls: 'kali-gray' },
+                { text: '[*] performance_schema', cls: 'kali-gray' },
+                { text: '[*] phpmyadmin', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: '[14:33:56] [INFO] fetched databases: 5', cls: 'kali-cyan' },
+                { text: '[14:33:56] [INFO] sqlmap resumed the following injection point(s)', cls: 'kali-gray' },
+                { text: 'Parameter: artist (GET) — Type: boolean-based blind, error-based, time-based, UNION query', cls: 'kali-yellow' },
+            ]),
+            makeScene('ffuf -u http://target.com/FUZZ -w /usr/share/wordlists/dirb/common.txt -recursion -c', [
+                { text: 'ffuf v2.1.0-dev', cls: 'kali-cyan' },
+                { text: 'Method: GET | URL: http://target.com/FUZZ', cls: 'kali-white' },
+                { text: 'Wordlist: FUZZ: /usr/share/wordlists/dirb/common.txt (4612 entries)', cls: 'kali-gray' },
+                { text: 'Recursion: enabled | Depth: 2 | Threads: 40', cls: 'kali-gray' },
+                { text: 'Matcher: HTTP status 200,204,301,302,307,401,403,405', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: 'admin                   [Status: 301, Size: 312, Redirect: /admin/]', cls: 'kali-yellow' },
+                { text: '  => /admin/index.php    [Status: 200, Size: 4821]', cls: 'kali-green' },
+                { text: '  => /admin/login.php    [Status: 200, Size: 1204]', cls: 'kali-green' },
+                { text: '  => /admin/users.php    [Status: 200, Size: 3402]', cls: 'kali-green' },
+                { text: '  => /admin/config.php   [Status: 200, Size: 624]', cls: 'kali-green' },
+                { text: 'api                     [Status: 301, Size: 308, Redirect: /api/]', cls: 'kali-yellow' },
+                { text: '  => /api/v1/users       [Status: 200, Size: 2512]', cls: 'kali-green' },
+                { text: '  => /api/v1/products    [Status: 200, Size: 9832]', cls: 'kali-green' },
+                { text: '  => /api/v1/orders      [Status: 200, Size: 644]', cls: 'kali-green' },
+                { text: '  => /api/swagger.json   [Status: 200, Size: 18230]', cls: 'kali-green' },
+                { text: 'backup                  [Status: 301, Size: 311, Redirect: /backup/]', cls: 'kali-yellow' },
+                { text: '  => /backup/db.sql      [Status: 200, Size: 45210]', cls: 'kali-green' },
+                { text: '  => /backup/config.bak   [Status: 200, Size: 3822]', cls: 'kali-green' },
+                { text: '.git                    [Status: 301, Size: 309, Redirect: /.git/]', cls: 'kali-yellow' },
+                { text: '  => /.git/config        [Status: 200, Size: 182]', cls: 'kali-green' },
+                { text: '  => /.git/HEAD          [Status: 200, Size: 23]', cls: 'kali-green' },
+                { text: '  => /.git/index         [Status: 200, Size: 1042]', cls: 'kali-green' },
+                { text: 'wp-admin                [Status: 302, Size: 156]', cls: 'kali-yellow' },
+                { text: 'login                   [Status: 200, Size: 3204]', cls: 'kali-green' },
+                { text: 'dashboard               [Status: 200, Size: 7402]', cls: 'kali-green' },
+                { text: 'config                  [Status: 403, Size: 292]', cls: 'kali-red' },
+                { text: 'phpinfo.php             [Status: 200, Size: 78203]', cls: 'kali-green' },
+                { text: 'robots.txt              [Status: 200, Size: 423]', cls: 'kali-green' },
+                { text: 'sitemap.xml             [Status: 200, Size: 1822]', cls: 'kali-green' },
+                { text: 'crossdomain.xml         [Status: 200, Size: 224]', cls: 'kali-green' },
+                { text: '.env                    [Status: 200, Size: 342]', cls: 'kali-green' },
+                { text: '.htaccess               [Status: 403, Size: 298]', cls: 'kali-gray' },
+                { text: 'server-status           [Status: 403, Size: 298]', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: ':: Progress: 4612 / 4612 (100.00%)', cls: 'kali-cyan' },
+                { text: 'ffuf scan completed in 18.42s — 28 matches across 2 levels', cls: 'kali-gray' },
+            ]),
+        ];
+
+        /* ─── Pane 2 Scenes ─── */
+        var scenes2 = [
+            makeScene('sudo hping3 -S --flood -V -p 80 --rand-source target.example.com', [
+                { text: 'HPING target.example.com (eth0 target.example.com): S set, 40 headers', cls: 'kali-gray' },
+                { text: 'Spoofing enabled | Flags: SYN | Window: 512 | TTL: 64', cls: 'kali-cyan' },
+                { text: 'Sending 65535 packets with randomized source IPs', cls: 'kali-yellow' },
+                { text: 'Rate: 1423 packets/sec | Total: 1423', cls: 'kali-gray' },
+                { text: '10.0.0.52:12847  -> target.example.com:80 [S] seq=18392045 win=512', cls: 'kali-red' },
+                { text: '172.16.0.88:55321 -> target.example.com:80 [S] seq=56781234 win=512', cls: 'kali-yellow' },
+                { text: '192.168.1.200:31092 -> target.example.com:80 [S] seq=99018273 win=512', cls: 'kali-red' },
+                { text: 'Rate: 2841 packets/sec | Total: 2841', cls: 'kali-gray' },
+                { text: '10.0.0.105:22801 -> target.example.com:80 [S] seq=44556677 win=512', cls: 'kali-yellow' },
+                { text: '172.16.0.33:49152 -> target.example.com:80 [S] seq=11223344 win=512', cls: 'kali-red' },
+                { text: '192.168.1.77:61023 -> target.example.com:80 [S] seq=99887766 win=512', cls: 'kali-yellow' },
+                { text: 'Rate: 4012 packets/sec | Total: 4012', cls: 'kali-gray' },
+                { text: '10.0.0.200:33001 -> target.example.com:80 [S] seq=55443322 win=512', cls: 'kali-red' },
+                { text: '172.16.0.150:44012 -> target.example.com:80 [S] seq=77665544 win=512', cls: 'kali-yellow' },
+                { text: '192.168.2.10:55023 -> target.example.com:80 [S] seq=22334455 win=512', cls: 'kali-red' },
+                { text: 'Rate: 5510 packets/sec | Total: 5510', cls: 'kali-gray' },
+                { text: '10.10.10.50:32001 -> target.example.com:80 [S] seq=99880011 win=512', cls: 'kali-yellow' },
+                { text: '172.20.0.5:49012 -> target.example.com:80 [S] seq=33441122 win=512', cls: 'kali-red' },
+                { text: '192.168.5.100:60001 -> target.example.com:80 [S] seq=66778899 win=512', cls: 'kali-yellow' },
+                { text: 'Rate: 7204 packets/sec | Total: 7204', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: '--- target.example.com hping3 flood statistics ---', cls: 'kali-cyan' },
+                { text: 'Packets sent: 7204 | Time: 5.1s | Avg rate: 1412 pkt/s', cls: 'kali-white' },
+                { text: 'Target responsiveness: 12% packet loss detected', cls: 'kali-yellow' },
+                { text: 'TCP RST responses: 3842 | ICMP unreachable: 284', cls: 'kali-gray' },
+                { text: 'SYN-ACK responses slowing — target under stress', cls: 'kali-yellow' },
+                { text: 'Connection timeout — target may be down', cls: 'kali-red' },
+            ]),
+            makeScene('hydra -L /usr/share/wordlists/usernames.txt -P /usr/share/wordlists/rockyou.txt ssh://10.10.10.10 -t 4', [
+                { text: 'Hydra v9.5 (c) 2023 by van Hauser/THC', cls: 'kali-cyan' },
+                { text: 'Hydra starting at 14:35:12', cls: 'kali-gray' },
+                { text: '[DATA] max 4 tasks per 1 server, overall 4 tasks, 28432 login tries', cls: 'kali-gray' },
+                { text: '[DATA] attacking ssh://10.10.10.10:22/', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "123456" - 1 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "password" - 2 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "12345678" - 3 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "qwerty" - 4 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "root" - pass "toor" - 5 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "test" - pass "test" - 6 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "user" - pass "letmein" - 7 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "trustno1" - 8 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "dragon" - 9 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "master" - 10 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "monkey" - 11 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "abc123" - 12 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "passw0rd" - 13 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "shadow" - 14 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "sunshine" - 15 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "654321" - 16 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "superman" - 17 of 28432', cls: 'kali-gray' },
+                { text: '[ATTEMPT] target 10.10.10.10 - login "admin" - pass "qazwsx" - 18 of 28432', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: '[22][ssh] host: 10.10.10.10   login: admin   password: trustno1', cls: 'kali-green' },
+                { text: '[22][ssh] host: 10.10.10.10   login: root    password: toor', cls: 'kali-green' },
+                { text: '[STATUS] attack finished for 10.10.10.10 (2 valid pairs found)', cls: 'kali-green' },
+                { text: 'Hydra done: 1 targets, 2 valid passwords found in 18 attempts', cls: 'kali-gray' },
+                { text: 'Hydda finished at 14:35:30', cls: 'kali-gray' },
+            ]),
+            makeScene('searchsploit apache tomcat 9.0', [
+                { text: 'SearchSploit 2.0 (c) 2024', cls: 'kali-cyan' },
+                { text: '[i] Path: /usr/share/exploitdb', cls: 'kali-gray' },
+                { text: '[i] Searching for "apache tomcat 9.0" in CVE descriptions…', cls: 'kali-gray' },
+                { text: '[i] Found 22 results (displaying top 18)', cls: 'kali-gray' },
+                { text: '', cls: '' },
+                { text: 'Apache Tomcat 9.0.0.M1 - Remote Code Execution (RCE)', cls: 'kali-green' },
+                { text: 'Apache Tomcat 9.0.0.M1 - Cross-Site Scripting (XSS)', cls: 'kali-white' },
+                { text: 'Apache Tomcat 9.0.1 - Remote Code Execution', cls: 'kali-green' },
+                { text: 'Apache Tomcat 9.0.7 - Session Hijacking via SSL', cls: 'kali-white' },
+                { text: 'Apache Tomcat 9.0.10 - Denial of Service (DoS)', cls: 'kali-green' },
+                { text: 'Apache Tomcat 9.0.12 - Information Disclosure', cls: 'kali-white' },
+                { text: 'Apache Tomcat 9.0.14 - Local File Inclusion (LFI)', cls: 'kali-green' },
+                { text: 'Apache Tomcat 9.0.17 - Remote Code Execution (RCE)', cls: 'kali-green' },
+                { text: 'Apache Tomcat 9.0.20 - Authentication Bypass', cls: 'kali-yellow' },
+                { text: 'Apache Tomcat 9.0.21 - Path Traversal', cls: 'kali-white' },
+                { text: 'Apache Tomcat 9.0.24 - Request Smuggling', cls: 'kali-yellow' },
+                { text: 'Apache Tomcat 9.0.27 - SSRF via mod_proxy', cls: 'kali-white' },
+                { text: 'Apache Tomcat 9.0.30 - Session Poisoning', cls: 'kali-green' },
+                { text: 'Apache Tomcat 9.0.31 - Remote Code Execution (RCE)', cls: 'kali-green' },
+                { text: 'Apache Tomcat 9.0.34 - HTTP Response Splitting', cls: 'kali-white' },
+                { text: 'Apache Tomcat 9.0.36 - Cache Poisoning', cls: 'kali-yellow' },
+                { text: 'Apache Tomcat 9.0.38 - Memory Leak', cls: 'kali-white' },
+                { text: 'Apache Tomcat 9.0.40 - Deserialization RCE', cls: 'kali-green' },
+                { text: '', cls: '' },
+                { text: 'Root exploits: 14 | Remote exploits: 8 | Webapps: 22 | DoS: 6', cls: 'kali-gray' },
+                { text: 'Most recent: 2024-11-01 | Critical severity CVEs: 8', cls: 'kali-cyan' },
+            ]),
+        ];
+
+        /* ─── Ghost Playback ─── */
+        var paneIdx1 = 0, paneIdx2 = 0;
+
+        function calcSceneTime(lines) {
+            var totalChars = 0;
+            for (var i = 0; i < lines.length; i++) {
+                totalChars += lines[i].text.length;
+            }
+            return totalChars * 21 + lines.length * 40 + 2500;
+        }
+
+        function playScene(el, scenes, idx, cb) {
+            if (idx >= scenes.length) { idx = 0; }
+            var lines = scenes[idx];
+            var totalTime = calcSceneTime(lines);
+            streamLines(el, lines, 0, 40);
+            setTimeout(function() {
+                clearPane(el);
+                playScene(el, scenes, idx + 1, cb);
+            }, totalTime);
+        }
+
+        setTimeout(function() { playScene(out1, scenes1, 0); }, 500);
+        setTimeout(function() { playScene(out2, scenes2, 0); }, 1200);
+    })();
+
+    (function() {
+        document.querySelectorAll('.torn-card, .project-card').forEach(card => {
+            const tear = document.createElement('div');
+            tear.className = 'paper-tear ' + (Math.random() > 0.5 ? 'paper-tear-1' : 'paper-tear-2');
+            card.appendChild(tear);
+        });
+    })();
+
+    (function() {
+        const navLinks = document.querySelectorAll('.navbar-link');
+        const sections = document.querySelectorAll('.content-section');
+
+        function showSection(id) {
+            sections.forEach(s => s.classList.remove('active'));
+            navLinks.forEach(t => t.classList.remove('active'));
+
+            const section = document.getElementById('section-' + id);
+            if (section) section.classList.add('active');
+
+            const link = document.querySelector('.navbar-link[data-section="' + id + '"]');
+            if (link) link.classList.add('active');
+
+            document.querySelector('.journal-content').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                showSection(this.dataset.section);
+            });
+        });
+
+        const seeMoreBtn = document.getElementById('seeMoreWriteups');
+        if (seeMoreBtn) {
+            seeMoreBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showSection('writeups');
+            });
+        }
+
+        document.addEventListener('keydown', function(e) {
+            const active = document.querySelector('.navbar-link.active');
+            if (!active) return;
+            const items = Array.from(navLinks);
+            const idx = items.indexOf(active);
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                const next = items[(idx + 1) % items.length];
+                if (next) showSection(next.dataset.section);
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                const prev = items[(idx - 1 + items.length) % items.length];
+                if (prev) showSection(prev.dataset.section);
+            }
+        });
+    })();
+
+    (function() {
+        const search = document.getElementById('writeupSearch');
+        const clearBtn = document.getElementById('writeupClear');
+        const status = document.getElementById('searchStatus');
+        const filters = document.getElementById('writeupFilters');
+        if (!search) return;
+
+        let currentCat = 'all';
+
+        function doSearch(query) {
+            const q = query.trim().toLowerCase();
+            const terms = q ? q.split(/\s+/) : [];
+            const cards = Array.from(document.querySelectorAll('#writeupGrid .project-card'));
+
+            let visible = 0;
+            cards.forEach(card => {
+                if (card._hideTimer) { clearTimeout(card._hideTimer); card._hideTimer = null; }
+
+                const cat = card.getAttribute('data-category');
+                const catMatch = currentCat === 'all' || cat === currentCat;
+
+                const title = (card.querySelector('.project-name')?.textContent || '').toLowerCase();
+                const tags = (card.querySelector('.project-tags')?.textContent || '').toLowerCase();
+                const desc = (card.querySelector('.project-desc')?.textContent || '').toLowerCase();
+
+                let score = 0;
+                terms.forEach(t => {
+                    if (title.includes(t)) score += 3;
+                    if (tags.includes(t)) score += 2;
+                    if (desc.includes(t)) score += 1;
+                });
+
+                const textMatch = !terms.length || score > 0;
+
+                if (catMatch && textMatch) {
+                    card.style.display = '';
+                    card.dataset.score = score || 0;
+                    requestAnimationFrame(function() {
+                        card.style.opacity = '1';
+                        card.style.transform = 'rotate(var(--r, 0deg)) scale(1)';
+                        card.classList.remove('stamp');
+                        void card.offsetWidth;
+                        card.classList.add('stamp');
+                        setTimeout(function() { card.classList.remove('stamp'); }, 400);
+                    });
+                    visible++;
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'rotate(var(--r, 0deg)) scale(0.95)';
+                    card._hideTimer = setTimeout(function() { card.style.display = 'none'; }, 280);
+                }
+            });
+
+            if (status) {
+                const total = cards.length;
+                if (visible === 0) {
+                    const catLabel = currentCat !== 'all' ? ' in ' + currentCat.toUpperCase() : '';
+                    status.textContent = 'No writeups match' + catLabel + (q ? ' "' + q + '"' : '');
+                } else if (visible === total && !q && currentCat === 'all') {
+                    status.textContent = '';
+                } else {
+                    let msg = visible + ' of ' + total + ' writeups';
+                    if (currentCat !== 'all') msg += ' in ' + currentCat.toUpperCase();
+                    if (q) msg += ' match "' + q + '"';
+                    status.textContent = msg;
+                }
+            }
+        }
+
+        search.addEventListener('input', function() { doSearch(this.value); });
+        search.addEventListener('keydown', function(e) { if (e.key === 'Escape') { this.value = ''; doSearch(''); this.blur(); } });
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() { search.value = ''; doSearch(''); search.focus(); });
+        }
+
+        if (filters) {
+            filters.addEventListener('click', function(e) {
+                const target = e.target;
+                if (!target.classList.contains('writeup-filter')) return;
+                filters.querySelectorAll('.writeup-filter').forEach(function(f) { f.classList.remove('active'); });
+                target.classList.add('active');
+                currentCat = target.getAttribute('data-cat');
+                doSearch(search.value);
+            });
+        }
+    })();
+
+    (function() {
+        document.querySelectorAll('#writeupGrid .project-card').forEach(function(card) {
+            var href = card.getAttribute('href');
+            if (!href) return;
+            try {
+                var u = new URL(href);
+                var preview = u.hostname + u.pathname;
+                if (preview.length > 60) preview = preview.substring(0, 57) + '...';
+                var el = document.createElement('div');
+                el.className = 'project-url';
+                el.textContent = '\u2197 ' + preview;
+                card.appendChild(el);
+            } catch(e) {}
+        });
+    })();
+
+    (function() {
+        const body = document.body;
+        let lastX = 0, lastY = 0, lastT = 0;
+        body.addEventListener('mousemove', function(e) {
+            const dx = e.clientX - lastX, dy = e.clientY - lastY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 8) return;
+            const dt = e.timeStamp - lastT;
+            const speed = dist / Math.max(dt, 16);
+            lastX = e.clientX; lastY = e.clientY; lastT = e.timeStamp;
+
+            var size = 'sm', count = 1;
+            if (speed > 0.8) { size = 'md'; count = 2; }
+            if (speed > 1.5) { size = 'lg'; count = 3; }
+            if (speed > 2.5) { size = 'xl'; count = 4; }
+
+            var angle = Math.atan2(dy, dx) * (180 / Math.PI) + (Math.random() - 0.5) * 30;
+
+            for (var i = 0; i < count; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'pencil-trail ' + size;
+                var offsetX = (Math.random() - 0.5) * dist * 0.15;
+                var offsetY = (Math.random() - 0.5) * dist * 0.15;
+                dot.style.left = (e.clientX + offsetX) + 'px';
+                dot.style.top = (e.clientY + offsetY) + 'px';
+                dot.style.setProperty('--pr', (angle + (Math.random() - 0.5) * 40) + 'deg');
+                dot.style.animation = 'pencilFade ' + (1.8 + Math.random() * 0.4) + 's ease-out forwards';
+                body.appendChild(dot);
+                setTimeout(function() { if (dot.parentNode) dot.remove(); }, 2500);
+            }
+        });
+    })();
+
+    (function() {
+        var overlay = document.getElementById('journeyModalOverlay');
+        var closeBtn = document.getElementById('journeyModalClose');
+        if (overlay && closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                overlay.classList.add('hidden');
+                startTour();
+            });
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    overlay.classList.add('hidden');
+                    startTour();
+                }
+            });
+        }
+        function startTour() {
+            if (!window.driver || !window.driver.js) return;
+            var driverFn = window.driver.js.driver || window.driver.js;
+            if (typeof driverFn !== 'function') return;
+            var tour = driverFn({
+                showProgress: true,
+                progressText: '{{current}} of {{total}}',
+                nextBtnText: 'Next',
+                prevBtnText: 'Back',
+                doneBtnText: 'Done',
+                opacity: 0.5,
+                padding: 8,
+                popoverClass: 'driver-popover'
+            });
+            function show(id) {
+                document.querySelectorAll('.content-section').forEach(function(s) { s.classList.remove('active'); });
+                document.querySelectorAll('.navbar-link').forEach(function(t) { t.classList.remove('active'); });
+                var section = document.getElementById('section-' + id);
+                if (section) section.classList.add('active');
+                var link = document.querySelector('.navbar-link[data-section="' + id + '"]');
+                if (link) link.classList.add('active');
+                document.querySelector('.journal-content').scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            tour.setSteps([
+                {
+                    element: '.navbar-title',
+                    popover: {
+                        title: 'Welcome to KURT ZAMORA',
+                        description: 'A penetration testing portfolio tracking my journey through HTB labs, writeups, and certifications.',
+                        side: 'bottom',
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '.split-terminals',
+                    popover: {
+                        title: 'Kali Terminal Simulation',
+                        description: 'Watch real-time penetration testing tool simulations — nmap, sqlmap, ffuf, hydra, and more. Typewriter-style auto-play in split-screen.',
+                        side: 'bottom',
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '#section-about .bio-text',
+                    popover: {
+                        title: 'whoami',
+                        description: 'Professional bio, skill set, and key stats.',
+                        side: 'bottom',
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '#tocList',
+                    popover: {
+                        title: 'Navigation',
+                        description: 'Switch sections with these tabs or Left/Right arrow keys.',
+                        side: 'bottom',
+                        align: 'start'
+                    }
+                },
+                {
+                    element: '#section-about .section-title',
+                    popover: {
+                        title: 'Certifications',
+                        description: 'eJPT, OSCP, CRTP, PNPT — earned and in progress. Now on the whoami page.',
+                        side: 'bottom',
+                        align: 'start'
+                    },
+                    onHighlightStarted: function() { show('about'); }
+                },
+                {
+                    element: '.navbar-link[data-section="writeups"]',
+                    popover: {
+                        title: 'Writeups & Search',
+                        description: 'HTB & THM walkthroughs and security research. Filter by title, tag, or technique.',
+                        side: 'bottom',
+                        align: 'start'
+                    },
+                    onHighlightStarted: function() { show('writeups'); }
+                },
+                {
+                    element: '.navbar-link[data-section="projects"]',
+                    popover: {
+                        title: 'Lab Projects',
+                        description: 'Home lab environments — AD infrastructure, C2 frameworks, and phishing simulations.',
+                        side: 'bottom',
+                        align: 'start'
+                    },
+                    onHighlightStarted: function() { show('projects'); }
+                },
+            ]);
+            setTimeout(function() { tour.drive(); }, 300);
+        }
+    })();
+})();
+</script>
+</body>
+</html>
